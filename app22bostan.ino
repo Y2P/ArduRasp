@@ -9,9 +9,11 @@ Timer yayInfo; // This timer is defined for string information request, PERIODIC
 
 
 String inputString = "";         // a string to hold incoming data
+char *buf;                      // Buffer for incoming data
 boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
 float unitSpeedUpdate = 0; // Unit speed change 
+
 
 const byte trigPin1 = 4;
 const byte echoPin1 = 3;
@@ -62,7 +64,7 @@ int dir = 0;
 
 void yayRequest()
 {
-  Serial.println(measured_val);
+  Serial.println(buf);
   delay(10);
      // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
@@ -223,7 +225,6 @@ void serialEvent() {
     }
   }
 //  Serial.println(inputString);
-    char *buf;
     inputString.toCharArray(buf, 10);
     measured_val = atof(buf);
     inputString = "";
