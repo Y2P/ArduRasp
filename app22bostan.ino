@@ -55,6 +55,13 @@ float alpha = 0.05;
 boolean toggle0 = 0;
 int dir = 0;
 
+void yaygergin()
+{
+  Serial.println("request");
+  delay(2000);
+     // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
+
+}
 
 void setup() {
   // put your setup code here, to run once:
@@ -166,6 +173,8 @@ void Motordrive(int dir2, float velocity_L, float velocity_R){
  if (velocity_R <20)velocity_R=20;
  if (velocity_L >255)velocity_L=255;
  if (velocity_R >255)velocity_R=255;
+// MOTORLAR BURADA SUSTURULDU
+/*
  if (dir2) { //not yapılacak ipi kontrol ediyor
   analogWrite(Mr1,velocity_L);
   analogWrite(Mr2,velocity_R*0.97);
@@ -177,6 +186,9 @@ else {
   analogWrite(Mf2,velocity_L*0.97);
   analogWrite(Mr1,0);
   analogWrite(Mr2,0);}
+}
+*/
+
 }
 /*
   SerialEvent occurs whenever a new data comes in the
@@ -203,11 +215,4 @@ void serialEvent() {
 }
 
 
-void yaygergin()
-{
-  Serial.println("request");
-  delay(2000);
-     // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
-
-}
 
