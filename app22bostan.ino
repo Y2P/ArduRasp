@@ -30,6 +30,7 @@ const byte Mr2 = 10;
 const byte DirSel = 7;
 const byte yay_interrupt = 0;
 
+float unitupdate
 float KP1 =10;
 float KD1 =0;
 float KP2 =10;
@@ -95,6 +96,7 @@ void loop() {
 if( digitalRead(2) ) 
 {
     // Update Scale parameter according to the last distance information  
+    if
 }
 
 sensor.update();
@@ -184,7 +186,7 @@ void Motordrive(int dir2, float velocity_L, float velocity_R){
  if (velocity_L >255)velocity_L=255;
  if (velocity_R >255)velocity_R=255;
 // MOTORLAR BURADA SUSTURULDU
-/*
+
  if (dir2) { //not yapılacak ipi kontrol ediyor
   analogWrite(Mr1,velocity_L);
   analogWrite(Mr2,velocity_R*0.97);
@@ -197,7 +199,6 @@ else {
   analogWrite(Mr1,0);
   analogWrite(Mr2,0);}
 }
-*/
 
 }
 /*
@@ -220,6 +221,7 @@ void serialEvent() {
     }
   }
 //  Serial.println(inputString);
+    measured_dist = atoi(inputString)
     inputString = "";
 
 }
