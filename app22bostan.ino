@@ -68,6 +68,7 @@ void yayRequest()
 
 }
 
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(trigPin1, OUTPUT); // Sets the trigPin as an Output
@@ -222,7 +223,9 @@ void serialEvent() {
     }
   }
 //  Serial.println(inputString);
-    measured_val = (inputString.toFloat());
+    char *buf;
+    inputString.toCharArray(buf, 10);
+    measured_val = atof(buf);
     inputString = "";
 
 }
