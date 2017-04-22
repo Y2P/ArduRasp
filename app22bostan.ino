@@ -83,7 +83,7 @@ void setup() {
 //  attachInterrupt(yay_interrupt, yayRequest, FALLING);
 
   dir = digitalRead(DirSel);
- // Serial.begin(9600);
+ / Serial.begin(9600);
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
   yayInfo.every(10,yayRequest);
