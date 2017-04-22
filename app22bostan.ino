@@ -92,10 +92,11 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 // Spring polling is done here
-if( digitalRead(2) ) 
+/*if( digitalRead(2) ) 
 {
     // Update Scale parameter according to the last distance information  
 }
+*/
 sensor.update();
 yayInfo.update();
 //timer2.update();
