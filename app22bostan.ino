@@ -1,6 +1,7 @@
-#include <Event.h>
 
+#include <Event.h>
 #include <Timer.h>
+#include <floatToString.h>
 
 #include <Arduino.h>
 Timer timer2;
@@ -9,7 +10,7 @@ Timer yayInfo; // This timer is defined for string information request, PERIODIC
 
 
 String inputString = "";         // a string to hold incoming data
-char *buf;                      // Buffer for incoming data
+char buf[20];                      // Buffer for incoming data
 boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
 float unitSpeedUpdate = 0; // Unit speed change 
@@ -64,8 +65,10 @@ int dir = 0;
 
 void yayRequest()
 {
-  Serial.println(buf);
+  Serial.println(measured_val,DEC);
   delay(10);
+  inputString = "";
+
      // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
 }
@@ -225,9 +228,8 @@ void serialEvent() {
     }
   }
 //  Serial.println(inputString);
-    inputString.toCharArray(buf, 10);
+    inputString.toCharArray(buf, 20);
     measured_val = atof(buf);
-    inputString = "";
 
 }
 
