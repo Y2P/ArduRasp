@@ -61,7 +61,7 @@ int dir = 0;
 void yayRequest()
 {
   Serial.println("request");
-  delay(2000);
+  //delay(2000);
      // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
 }
@@ -86,7 +86,7 @@ void setup() {
  // Serial.begin(9600);
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
-  yayInfo.every(100,yayRequest);
+  yayInfo.every(10,yayRequest);
 }
 
 void loop() {
