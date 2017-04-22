@@ -77,7 +77,7 @@ void setup() {
   pinMode(Mr2, OUTPUT);
   pinMode(DirSel, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
-  attachInterrupt((yay), yaygergin, FALLING);
+  attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
   dir = digitalRead(DirSel);
  // Serial.begin(9600);
