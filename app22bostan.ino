@@ -1,7 +1,6 @@
 
 #include <Event.h>
 #include <Timer.h>
-#include <floatToString.h>
 
 #include <Arduino.h>
 Timer timer2;
@@ -13,7 +12,8 @@ String inputString = "";         // a string to hold incoming data
 char buf[20];                      // Buffer for incoming data
 boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
-float unitSpeedUpdate = 0; // Unit speed change 
+float lastval = 0;
+float unitSpeedUpdate = 0.05; // Unit speed change 
 
 
 const byte trigPin1 = 4;
@@ -32,7 +32,7 @@ const byte Mf2 = 11;
 const byte Mr2 = 10;
 
 const byte DirSel = 7;
-const byte yay_interrupt = 0;
+const byte yay = 2;
 
 
 float KP1 =10;
@@ -65,12 +65,16 @@ int dir = 0;
 
 void yayRequest()
 {
-  Serial.println(measured_val,DEC);
+  Serial.print(digitalRead(yay),BIN);
+  Serial.print(" ");
+  Serial.print(measured_val,DEC);
+  Serial.print(" ");
+  Serial.print(scaler1,DEC);
+  Serial.print(" ");
+  Serial.println(scaler2,DEC);
+
   delay(10);
   inputString = "";
-
-     // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
-
 }
 
 
@@ -100,8 +104,19 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 // Spring polling is done here
-if( digitalRead(2) ) 
+if( digitalRead(yay) ) 
 {
+  // Basic Prototype Decision making implemented here
+    if((lastval - measured_val) < -5)
+    {
+        scaler1 = scaler1 + unitSpeedUpdate;
+        scaler2 = scaler2 + unitSpeedUpdate;
+    }
+    else if((lastval - measured_val) > 5)
+    {
+        scaler1 = scaler1 - unitSpeedUpdate;
+        scaler2 = scaler2 - unitSpeedUpdate;
+    }
     // Update Scale parameter according to the last distance information  
     
 }
@@ -227,6 +242,7 @@ void serialEvent() {
       break;
     }
   }
+    lastval = measured_val;
 //  Serial.println(inputString);
     inputString.toCharArray(buf, 20);
     measured_val = atof(buf);
