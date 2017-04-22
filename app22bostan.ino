@@ -188,7 +188,7 @@ void Motordrive(int dir2, float velocity_L, float velocity_R){
  if (velocity_L >255)velocity_L=255;
  if (velocity_R >255)velocity_R=255;
 // MOTORLAR BURADA SUSTURULDU
-
+/*
  if (dir2) { //not yapılacak ipi kontrol ediyor
   analogWrite(Mr1,velocity_L);
   analogWrite(Mr2,velocity_R*0.97);
@@ -201,7 +201,7 @@ else {
   analogWrite(Mr1,0);
   analogWrite(Mr2,0);
   }
-
+*/
 }
 /*
   SerialEvent occurs whenever a new data comes in the
