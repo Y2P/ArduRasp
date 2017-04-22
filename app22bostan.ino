@@ -61,7 +61,7 @@ int dir = 0;
 void yayRequest()
 {
   Serial.println("request");
-  //delay(2000);
+  delay(10);
      // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
 }
@@ -83,7 +83,11 @@ void setup() {
 //  attachInterrupt(yay_interrupt, yayRequest, FALLING);
 
   dir = digitalRead(DirSel);
+<<<<<<< HEAD
  / Serial.begin(9600);
+=======
+  Serial.begin(9600);
+>>>>>>> cc8b0ecd82fb1a0c3586476d775236bd1195d484
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
   yayInfo.every(10,yayRequest);
@@ -97,7 +101,6 @@ void loop() {
     // Update Scale parameter according to the last distance information  
 }
 */
-Serial.println("request");
 
 sensor.update();
 yayInfo.update();
@@ -221,7 +224,7 @@ void serialEvent() {
       break;
     }
   }
-  Serial.println(inputString);
+//  Serial.println(inputString);
     inputString = "";
 
 }
