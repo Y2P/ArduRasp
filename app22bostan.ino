@@ -15,6 +15,7 @@ float measured_val= 0; // Global Variable for passing incoming value
 float lastval = 0;
 float unitSpeedUpdate = 0.05; // Unit speed change 
 
+float maxscale = 1;      // 
 
 const byte trigPin1 = 4;
 const byte echoPin1 = 3;
@@ -109,13 +110,19 @@ if( digitalRead(yay) )
   // Basic Prototype Decision making implemented here
     if((lastval - measured_val) < -5)
     {
+      if(maxscale > scaler1 && maxscale > scaler2)
+      {
         scaler1 = scaler1 + unitSpeedUpdate;
         scaler2 = scaler2 + unitSpeedUpdate;
+      }
     }
     else if((lastval - measured_val) > 5)
     {
+      if(0 < scaler1 && 0 < scaler2)
+      {
         scaler1 = scaler1 - unitSpeedUpdate;
         scaler2 = scaler2 - unitSpeedUpdate;
+      }
     }
     // Update Scale parameter according to the last distance information  
     
