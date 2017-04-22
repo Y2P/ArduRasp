@@ -3,7 +3,7 @@
 #include <Timer.h>
 
 #include <Arduino.h>
-
+#include <String.h>
 Timer timer2;
 Timer sensor;
 Timer yayInfo; // This timer is defined for string information request, PERIODICALLY
