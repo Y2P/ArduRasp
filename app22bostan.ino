@@ -14,6 +14,7 @@ boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
 float lastval = 0;
 float unitSpeedUpdate = 0.05; // Unit speed change 
+float range = 10;
 
 float maxscale = 1;      // 
 
@@ -108,7 +109,7 @@ void loop() {
 if( digitalRead(yay) == 0) 
 {
   // Basic Prototype Decision making implemented here
-    if((lastval - measured_val) < -5)
+    if((lastval - measured_val) < -range)
     {
       if(maxscale > scaler1 && maxscale > scaler2)
       {
@@ -116,7 +117,7 @@ if( digitalRead(yay) == 0)
         scaler2 = scaler2 + unitSpeedUpdate;
       }
     }
-    else if((lastval - measured_val) > 5)
+    else if((lastval - measured_val) > range)
     {
       if(0 < scaler1 && 0 < scaler2)
       {
