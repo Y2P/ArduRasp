@@ -105,7 +105,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 // Spring polling is done here
-if( digitalRead(yay) ) 
+if( digitalRead(yay) == 0) 
 {
   // Basic Prototype Decision making implemented here
     if((lastval - measured_val) < -5)
