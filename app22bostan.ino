@@ -6,6 +6,9 @@
 
 Timer timer2;
 Timer sensor;
+Timer yayInfo; // This timer is defined for string information request, PERIODICALLY
+
+
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
 
@@ -55,7 +58,7 @@ float alpha = 0.05;
 boolean toggle0 = 0;
 int dir = 0;
 
-void yaygergin()
+void yayRequest()
 {
   Serial.println("request");
   delay(2000);
@@ -77,18 +80,24 @@ void setup() {
   pinMode(Mr2, OUTPUT);
   pinMode(DirSel, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
-  attachInterrupt(yay_interrupt, yaygergin, FALLING);
+//  attachInterrupt(yay_interrupt, yayRequest, FALLING);
 
   dir = digitalRead(DirSel);
  // Serial.begin(9600);
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
-  
+  yayInfo.every(100,yayRequest);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+// Spring polling is done here
+if( digitalRead(2) ) 
+{
+    // Update Scale parameter according to the last distance information  
+}
 sensor.update();
+yayInfo.update();
 //timer2.update();
 delta_sense1 = sense1 - old_sense1;
 old_sense1 = sense1;
