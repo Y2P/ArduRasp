@@ -25,7 +25,7 @@ const byte Mf2 = 11;
 const byte Mr2 = 10;
 
 const byte DirSel = 7;
-const byte yay = 2;
+const byte yay_interrupt = 0;
 
 float KP1 =10;
 float KD1 =0;
@@ -77,7 +77,7 @@ void setup() {
   pinMode(Mr2, OUTPUT);
   pinMode(DirSel, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
+  attachInterrupt(yay_interrupt, yaygergin, FALLING);
 
   dir = digitalRead(DirSel);
  // Serial.begin(9600);
