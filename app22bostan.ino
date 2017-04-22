@@ -97,6 +97,8 @@ void loop() {
     // Update Scale parameter according to the last distance information  
 }
 */
+Serial.println("request");
+
 sensor.update();
 yayInfo.update();
 //timer2.update();
