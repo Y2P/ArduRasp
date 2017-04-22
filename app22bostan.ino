@@ -11,6 +11,8 @@ Timer yayInfo; // This timer is defined for string information request, PERIODIC
 
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
+float measured_val= 0; // Global Variable for passing incoming value
+float unitSpeedUpdate = 0; // Unit speed change 
 
 const byte trigPin1 = 4;
 const byte echoPin1 = 3;
@@ -30,7 +32,7 @@ const byte Mr2 = 10;
 const byte DirSel = 7;
 const byte yay_interrupt = 0;
 
-float unitupdate
+
 float KP1 =10;
 float KD1 =0;
 float KP2 =10;
@@ -61,7 +63,7 @@ int dir = 0;
 
 void yayRequest()
 {
-  Serial.println("request");
+  Serial.println(measured_val);
   delay(10);
      // attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
 
@@ -96,7 +98,7 @@ void loop() {
 if( digitalRead(2) ) 
 {
     // Update Scale parameter according to the last distance information  
-    if
+    
 }
 
 sensor.update();
@@ -197,8 +199,8 @@ else {
   analogWrite(Mf1,velocity_R);
   analogWrite(Mf2,velocity_L*0.97);
   analogWrite(Mr1,0);
-  analogWrite(Mr2,0);}
-}
+  analogWrite(Mr2,0);
+  }
 
 }
 /*
@@ -221,7 +223,7 @@ void serialEvent() {
     }
   }
 //  Serial.println(inputString);
-    measured_dist = atoi(inputString)
+    measured_val = (inputString.toFloat());
     inputString = "";
 
 }
