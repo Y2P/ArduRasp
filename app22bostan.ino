@@ -1,5 +1,8 @@
 #include <Event.h>
+
 #include <Timer.h>
+
+#include <Arduino.h>
 
 Timer timer2;
 Timer sensor;
@@ -67,7 +70,7 @@ void setup() {
   pinMode(Mr2, OUTPUT);
   pinMode(DirSel, INPUT_PULLUP);
   pinMode(2, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(yay), yaygergin, FALLING);
+  attachInterrupt((yay), yaygergin, FALLING);
 
   dir = digitalRead(DirSel);
  // Serial.begin(9600);
