@@ -13,10 +13,12 @@ char buf[20];                      // Buffer for incoming data
 boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
 float lastval = 0;
-float unitSpeedUpdate = 0.05; // Unit speed change 
+float unitSpeedUpdate = 1.1; // Unit speed change 
 float range = 10;
 
 float maxscale = 1;      // 
+
+
 
 const byte trigPin1 = 4;
 const byte echoPin1 = 3;
@@ -113,16 +115,16 @@ if( digitalRead(yay) == 0)
     {
       if(maxscale > scaler1 && maxscale > scaler2)
       {
-        scaler1 = scaler1 + unitSpeedUpdate;
-        scaler2 = scaler2 + unitSpeedUpdate;
+        scaler1 = scaler1 * unitSpeedUpdate;
+        scaler2 = scaler2 * unitSpeedUpdate;
       }
     }
     else if((lastval - measured_val) > range)
     {
       if(0 < scaler1 && 0 < scaler2)
       {
-        scaler1 = scaler1 - unitSpeedUpdate;
-        scaler2 = scaler2 - unitSpeedUpdate;
+        scaler1 = scaler1 / unitSpeedUpdate;
+        scaler2 = scaler2 / unitSpeedUpdate;
       }
     }
     // Update Scale parameter according to the last distance information  
