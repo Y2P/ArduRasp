@@ -13,10 +13,16 @@ char buf[20];                      // Buffer for incoming data
 boolean stringComplete = false;  // whether the string is complete
 float measured_val= 0; // Global Variable for passing incoming value
 float lastval = 0;
-float unitSpeedUpdate = 1.1; // Unit speed change 
-float range = 10;
+float unitSpeedUpdate_Dec = 1.05; // Unit speed change 
+float unitSpeedUpdate_Acc = 1.1; // Unit speed change 
+float SpringFreeAcc = 1.1;
+float unitSpeedUpdate_Acc_L1 = 0.05;
+float unitSpeedUpdate_Acc_L2 = 0.04;
+float unitSpeedUpdate_Dec_L2 = 0.08;
+float unitSpeedUpdate_Dec_L1 = 0.1;
+float range = 6;
 
-float maxscale = 1;      // 
+float maxscale = 0.9;      // 
 
 
 
@@ -98,7 +104,6 @@ void setup() {
   pinMode(2, INPUT_PULLUP);
 //  attachInterrupt(yay_interrupt, yayRequest, FALLING);
 
-  dir = digitalRead(DirSel);
   Serial.begin(9600);
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
@@ -108,27 +113,59 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 // Spring polling is done here
-if( digitalRead(yay) == 0) 
+dir = digitalRead(DirSel);
+if(measured_val > 15)
 {
-  // Basic Prototype Decision making implemented here
-    if((lastval - measured_val) < -range)
-    {
-      if(maxscale > scaler1 && maxscale > scaler2)
-      {
-        scaler1 = scaler1 * unitSpeedUpdate;
-        scaler2 = scaler2 * unitSpeedUpdate;
+  if( digitalRead(yay) == 0) 
+  {
+  
+      // Basic Prototype Decision making implemented here
+        if((lastval - measured_val) < -range)
+        {
+          if(maxscale > scaler1 && maxscale > scaler2)
+          {
+            // Linear Update 
+            scaler1 = scaler1 + unitSpeedUpdate_Acc_L1;
+            scaler2 = scaler2 + unitSpeedUpdate_Acc_L2;
+            // Muliplier update
+            //scaler1 = scaler1 * unitSpeedUpdate_Acc;
+           // scaler2 = scaler2 * unitSpeedUpdate_Acc;
+          }
+        }
+        else if((lastval - measured_val) > range)
+        {
+          if(0.1 < scaler1 && 0.1 < scaler2)
+          {
+            // Linear Update 
+            scaler1 = scaler1 - unitSpeedUpdate_Dec_L1;
+            scaler2 = scaler2 - unitSpeedUpdate_Dec_L2;
+             // Muliplier update
+            //scaler1 = scaler1 / unitSpeedUpdate_Dec;
+            // scaler2 = scaler2 / unitSpeedUpdate_Dec;
+          }
+        }
       }
-    }
-    else if((lastval - measured_val) > range)
-    {
-      if(0 < scaler1 && 0 < scaler2)
-      {
-        scaler1 = scaler1 / unitSpeedUpdate;
-        scaler2 = scaler2 / unitSpeedUpdate;
-      }
-    }
     // Update Scale parameter according to the last distance information  
     
+    
+    else if( digitalRead(yay) == 1) 
+    {
+      // When spring is free
+      if(maxscale > scaler1 && maxscale > scaler2)
+          {
+            // Linear update
+            scaler1 = scaler1 + unitSpeedUpdate_Acc_L1;
+            scaler2 = scaler2 + unitSpeedUpdate_Acc_L2;
+            // Multiplier update
+           // scaler1 = scaler1 * SpringFreeAcc;
+         //   scaler2 = scaler2 * SpringFreeAcc;
+          }
+    }
+}
+else 
+{
+  scaler1 = 0.25;
+  scaler2 = 0.2;
 }
 
 sensor.update();
