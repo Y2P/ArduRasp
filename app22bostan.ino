@@ -6,6 +6,9 @@
 Timer timer2;
 Timer sensor;
 Timer yayInfo; // This timer is defined for string information request, PERIODICALLY
+int Threshold = 45;
+int calculatedSpeed_L;
+int calculatedSpeed_R;
 
 
 String inputString = "";         // a string to hold incoming data
@@ -16,10 +19,10 @@ float lastval = 0;
 float unitSpeedUpdate_Dec = 1.05; // Unit speed change 
 float unitSpeedUpdate_Acc = 1.1; // Unit speed change 
 float SpringFreeAcc = 1.1;
-float unitSpeedUpdate_Acc_L1 = 0.05;
-float unitSpeedUpdate_Acc_L2 = 0.04;
-float unitSpeedUpdate_Dec_L2 = 0.08;
-float unitSpeedUpdate_Dec_L1 = 0.1;
+float unitSpeedUpdate_Acc_L1 = 0.005;
+float unitSpeedUpdate_Acc_L2 = 0.004;
+float unitSpeedUpdate_Dec_L2 = 0.16;
+float unitSpeedUpdate_Dec_L1 = 0.2;
 float range = 6;
 
 float maxscale = 0.9;      // 
@@ -45,9 +48,9 @@ const byte DirSel = 7;
 const byte yay = 2;
 
 
-float KP1 =10;
+float KP1 = 10;
 float KD1 =0;
-float KP2 =10;
+float KP2 = 10;
 float KD2 =0;
 float followdist = 10;
 float midspeed = 90;
@@ -107,15 +110,29 @@ void setup() {
   Serial.begin(9600);
  // timer2.every(1000,send_data);
   sensor.every(5,measure);
-  yayInfo.every(500,yayRequest);
+  yayInfo.every(100,yayRequest);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 // Spring polling is done here
 dir = digitalRead(DirSel);
-if(measured_val > 15)
+/*
+if(dir == 1){
+if ((calculatedSpeed_L - calculatedSpeed_R )> 10)
+  Threshold = 45;
+else 
+  Threshold = 35;
+}
+*/
+if(measured_val > Threshold)
 {
+  if(digitalRead(yay) == 0)
+  {
+    scaler1 = 0.5;
+    scaler2 = 0.4;
+  }
+ /*
   if( digitalRead(yay) == 0) 
   {
   
@@ -144,6 +161,11 @@ if(measured_val > 15)
             // scaler2 = scaler2 / unitSpeedUpdate_Dec;
           }
         }
+        else 
+        {
+          scaler1 = 0.5;
+          scaler2 = 0.4;
+        }
       }
     // Update Scale parameter according to the last distance information  
     
@@ -151,7 +173,7 @@ if(measured_val > 15)
     else if( digitalRead(yay) == 1) 
     {
       // When spring is free
-      if(maxscale > scaler1 && maxscale > scaler2)
+      if(0.5 > scaler1 && 0.5 > scaler2)
           {
             // Linear update
             scaler1 = scaler1 + unitSpeedUpdate_Acc_L1;
@@ -161,12 +183,29 @@ if(measured_val > 15)
          //   scaler2 = scaler2 * SpringFreeAcc;
           }
     }
+*/    
+  scaler1 = 0.5;
+  scaler2 = 0.4;
 }
-else 
+else if (measured_val == 0)
 {
-  scaler1 = 0.25;
-  scaler2 = 0.2;
+  scaler1 = 0.5;
+  scaler2 = 0.4;
 }
+else if (measured_val > Threshold-12 && measured_val < Threshold)
+{
+  scaler1 = 0.35;
+  scaler2 = 0.28;
+}
+else
+{
+  scaler1 = 0;
+  scaler2 = 0;
+}
+int last_leftspeed = leftspeed;
+int last_rightspeed = rightspeed;
+
+
 
 sensor.update();
 yayInfo.update();
@@ -183,14 +222,25 @@ if (delta_speed2 > midspeed)  delta_speed2 = midspeed;
 if (delta_speed2 < -midspeed)  delta_speed2 = -midspeed;
 if (dir)
 {
-leftspeed = scaler2*( midspeed - delta_speed2 );
-rightspeed = scaler2*(midspeed + delta_speed2 );
+   calculatedSpeed_L = ( midspeed + delta_speed2 );
+ calculatedSpeed_R = midspeed - delta_speed2;
+leftspeed = scaler2*calculatedSpeed_L;
+rightspeed = scaler2*calculatedSpeed_R;
  }
 else
 {
-  leftspeed = scaler1*( midspeed + delta_speed );
-  rightspeed = scaler1*(midspeed - delta_speed );
+ calculatedSpeed_L = ( midspeed + delta_speed );
+ calculatedSpeed_R = midspeed - delta_speed;
+ 
+//Serial.print(calculatedSpeed_L,DEC);
+//Serial.print(' ');
+//Serial.println(calculatedSpeed_R,DEC);
+  leftspeed = scaler1*calculatedSpeed_L;
+  rightspeed = scaler1*calculatedSpeed_R;
   }
+  //leftspeed = (leftspeed + last_leftspeed) / 2;
+ // rightspeed = (rightspeed + last_rightspeed) / 2;
+
 Motordrive(dir,leftspeed,rightspeed);
 
 }
@@ -213,9 +263,9 @@ void measure() { //Sensor Measurement
     distance3 = duration3 * 0.034 / 2;
   }
 
+  
   // LPF
   sense3 = (1-alpha)*sense3+alpha*distance3;
-  
   }
 else
 {
